@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PRAJNA LMS: Demo</title>
+<style>
+:root{--bg:#faf6ef;--card:#fff;--ink:#2a1a0c;--mut:#7a6650;--line:#e8dccb;--acc:#c8590a;--on:#fff;--soft:#fdf0e1;--ok:#2d7a3e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17120d;--card:#211a13;--ink:#f3eadf;--mut:#b3a392;--line:#3a2e22;--acc:#f08a3c;--on:#1a0f05;--soft:#2e2217;--ok:#6cc47f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17120d;--card:#211a13;--ink:#f3eadf;--mut:#b3a392;--line:#3a2e22;--acc:#f08a3c;--on:#1a0f05;--soft:#2e2217;--ok:#6cc47f;color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:10px 20px}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;font-weight:700;letter-spacing:2px;font-size:17px}
+.om{width:34px;height:34px;border-radius:50%;background:var(--acc);color:var(--on);display:grid;place-items:center;font-size:18px}
+.srch{flex:1;max-width:420px;border:1px solid var(--line);background:var(--bg);border-radius:20px;padding:7px 16px;color:var(--ink)}
+.sp{flex:1}
+.chip{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut)}
+.av{width:30px;height:30px;border-radius:50%;background:var(--soft);color:var(--acc);display:grid;place-items:center;font-weight:700}
+.wrap{max-width:1180px;margin:0 auto;padding:24px 20px 60px}
+.hero{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:36px 32px;margin-bottom:28px}
+.hero h1{font-size:clamp(24px,4vw,36px);line-height:1.2;margin-bottom:8px}
+.hero p{color:var(--mut);max-width:560px}
+.stats{display:flex;gap:28px;margin-top:18px;flex-wrap:wrap}
+.stats b{display:block;font-size:22px;color:var(--acc)}
+.stats span{font-size:12px;color:var(--mut)}
+h2{font-size:20px;margin:6px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;margin-bottom:30px}
+.mc{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;text-align:left;padding:0;transition:transform .15s,box-shadow .15s}
+.mc:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.mt{height:104px;display:grid;place-items:center;color:#fff;font-size:34px;position:relative}
+.bd{position:absolute;top:8px;right:8px;font-size:11px;padding:2px 9px;border-radius:12px;background:rgba(0,0,0,.45)}
+.mb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.mb strong{font-size:15px}.mb small{color:var(--mut);font-size:12.5px}
+.btn{margin-top:auto;border:0;border-radius:8px;padding:8px 14px;font-weight:600;background:var(--acc);color:var(--on)}
+.btn.o{background:none;border:1px solid var(--acc);color:var(--acc)}
+.btn.g{background:var(--line);color:var(--mut);cursor:default}
+.crumb{font-size:13px;color:var(--mut);margin-bottom:14px}
+.crumb a{color:var(--acc);cursor:pointer}
+.ban{border-radius:16px;padding:28px 30px;color:#fff;margin-bottom:22px}
+.ban h1{font-size:28px}.ban p{opacity:.9}
+.pb{height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.pb i{display:block;height:100%;background:var(--acc)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px;text-align:left;display:flex;flex-direction:column;gap:8px;transition:border-color .15s,transform .15s}
+.tile:hover:not(.lock){border-color:var(--acc);transform:translateY(-3px)}
+.tile.lock{opacity:.55;cursor:not-allowed}
+.tile .ic{font-size:38px}.tile h3{font-size:22px}.tile p{color:var(--mut)}
+.lay{display:grid;grid-template-columns:310px 1fr;gap:20px;align-items:start}
+.tree{background:var(--card);border:1px solid var(--line);border-radius:12px;position:sticky;top:calc(64px + env(safe-area-inset-top,0px));max-height:calc(100vh - 90px);overflow:auto}
+.th{padding:14px 16px;border-bottom:1px solid var(--line)}
+.th b{display:block;margin-bottom:8px}
+.th small{color:var(--mut);font-size:12px}
+details{border-bottom:1px solid var(--line)}
+summary{padding:10px 16px;cursor:pointer;font-weight:600;font-size:13.5px;display:flex;justify-content:space-between;list-style:none}
+summary::before{content:"▸";margin-right:8px;color:var(--acc)}
+details[open] summary::before{content:"▾"}
+summary span{margin-left:auto;color:var(--mut);font-weight:400;font-size:12px}
+.it{display:flex;gap:10px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:8px 16px 8px 30px;font-size:13.5px;border-left:3px solid transparent}
+.it:hover{background:var(--soft)}
+.it.on{background:var(--soft);border-left-color:var(--acc);font-weight:600}
+.dot{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);font-size:11px;display:grid;place-items:center;flex-shrink:0;color:var(--mut)}
+.dot.d{background:var(--ok);border-color:var(--ok);color:#fff}
+.main{display:flex;flex-direction:column;gap:18px;min-width:0}
+.hd{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.hd h1{font-size:26px;line-height:1.25}
+.tag{font-size:12px;color:var(--acc);letter-spacing:1px;text-transform:uppercase;font-weight:600}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 22px}
+.sec h3{font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--mut);margin-bottom:12px;display:flex;gap:8px;align-items:center}
+.sec p{margin-bottom:10px;line-height:1.75}
+.sec p:last-child{margin-bottom:0}
+.aud{display:flex;align-items:center;gap:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.pl{width:46px;height:46px;border-radius:50%;border:0;background:var(--acc);color:var(--on);font-size:18px;flex-shrink:0}
+.aud .bar{flex:1}
+.aud .tm{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-top:6px}
+.vid{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#2a1405;display:grid;place-items:center;color:#fff}
+.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vp{width:74px;height:74px;border-radius:50%;border:0;background:var(--acc);color:var(--on);font-size:28px}
+.vc{position:absolute;left:16px;bottom:12px;font-size:13px;opacity:.85}
+.cap{font-size:12.5px;color:var(--mut);margin-top:10px}.cap a{color:var(--acc)}
+.nav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.note{background:var(--soft);border:1px dashed var(--acc);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--mut);margin-bottom:18px}
+@media (max-width:820px){.lay{grid-template-columns:1fr}.tree{position:static;max-height:340px}.srch{display:none}}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="brand" onclick="go('home')"><span class="om">ॐ</span>PRAJNA</button>
+  <input class="srch" placeholder="Search prayers and stories" aria-label="Search">
+  <span class="sp"></span>
+  <div class="chip"><span id="subn"></span><span class="av">A</span>Arjun</div>
+</div>
+<div class="wrap" id="app"></div>
+
+<script>
+var MODS=[],S={view:'home',mod:1,kind:'prayers',idx:0},subs={1:1,2:1},done={},timer=null;
+var STORIES=[0,12,11,10,12];
+for(var i=1;i<=10;i++)MODS.push({n:i,h:(i*37+10)%360,live:i<=4,pr:35,st:STORIES[i]||0});
+
+function items(kind){var n=kind==='prayers'?35:STORIES[S.mod],a=[];
+  for(var i=0;i<n;i++)a.push(kind==='prayers'?(i===0?'Gratitude to Guru':'Prayer '+(i+1)+' (sample title)'):'Story '+(i+1)+' (sample title)');
+  return a}
+function cnt(kind){var c=0,n=items(kind).length;for(var i=0;i<n;i++)if(done[S.mod+kind+i])c++;return c}
+function mcol(m){return 'hsl('+m.h+' 42% 36%)'}
+
+function go(v,m,k){S.view=v;if(m)S.mod=m;if(k){S.kind=k;S.idx=0}
+  if(location.hash==='#'+v)render();else location.hash=v}
+window.addEventListener('hashchange',function(){var v=location.hash.slice(1);
+  if(['home','module','learn'].indexOf(v)>-1){S.view=v;render()}});
+function sub(m){subs[m]=1;render()}
+
+function home(){
+  var mine=MODS.filter(function(m){return subs[m.n]});
+  var h='<div class="hero"><div class="tag">Learn at your own pace</div><h1>Timeless prayers and stories, taught with animation and sacred audio</h1><p>Subscribe to a module, then explore its prayers and stories through short explanations, sloka audio and animated videos.</p><div class="stats"><div><b>10</b><span>Modules</span></div><div><b>140</b><span>Prayers (Modules 1–4)</span></div><div><b>45</b><span>Stories (Modules 1–4)</span></div></div></div>';
+  if(mine.length){h+='<h2>My learning</h2><div class="grid">'+mine.map(card).join('')+'</div>'}
+  h+='<h2>All modules</h2><div class="grid">'+MODS.map(card).join('')+'</div>';
+  return h}
+function card(m){var s=subs[m.n];
+  var btn=!m.live?'<button class="btn g">Coming soon</button>':s?'<button class="btn" onclick="go(\'module\','+m.n+')">Open course</button>':'<button class="btn o" onclick="event.stopPropagation();sub('+m.n+')">Subscribe</button>';
+  return '<div class="mc"><div class="mt" style="background:'+mcol(m)+'">ॐ<span class="bd">'+(s?'Subscribed':m.live?'Free demo':'Soon')+'</span></div><div class="mb"><strong>Module '+m.n+'</strong><small>'+(m.live?m.pr+' prayers · '+m.st+' stories':'Content in preparation')+'</small>'+btn+'</div></div>'}
+
+function module(){var m=MODS[S.mod-1],s=subs[m.n];
+  var lk=s?'':' lock';
+  function tile(k,ic,t,d,n){var c=cnt(k),p=Math.round(c/n*100);
+    return '<button class="tile'+lk+'" '+(s?'onclick="go(\'learn\',0,\''+k+'\')"':'disabled')+'><span class="ic">'+ic+'</span><h3>'+t+'</h3><p>'+d+'</p><div class="pb"><i style="width:'+p+'%"></i></div><small style="color:var(--mut)">'+c+' of '+n+' completed</small></button>'}
+  return '<div class="crumb"><a onclick="go(\'home\')">Home</a> / Module '+m.n+'</div><div class="ban" style="background:'+mcol(m)+'"><div class="tag" style="color:#fff;opacity:.8">Course</div><h1>Module '+m.n+'</h1><p>'+m.pr+' prayers and '+m.st+' stories</p>'+(s?'':'<div style="margin-top:14px"><button class="btn" style="background:#fff;color:#222" onclick="sub('+m.n+')">Subscribe to unlock</button></div>')+'</div><div class="tiles">'+tile('prayers','🙏','Prayers','Learn each prayer with an explanation, sloka audio and animation video.',m.pr)+tile('stories','📖','Stories','Stories that bring the values to life, with audio and video.',m.st)+'</div>'}
+
+function learn(){var k=S.kind,L=items(k),P=k==='prayers',g=P?7:4,t=L[S.idx],c=cnt(k),w=P?'Prayer':'Story';
+  var tr='';for(var a=0;a<L.length;a+=g){var b=Math.min(a+g,L.length),o=S.idx>=a&&S.idx<b,dn=0,r='';
+    for(var i=a;i<b;i++){var d=done[S.mod+k+i];if(d)dn++;r+='<button class="it'+(i===S.idx?' on':'')+'" onclick="pick('+i+')"><span class="dot'+(d?' d':'')+'">'+(d?'✓':i+1)+'</span>'+L[i]+'</button>'}
+    tr+='<details'+(o?' open':'')+'><summary>'+(P?'Prayers':'Stories')+' '+(a+1)+'–'+b+'<span>'+dn+'/'+(b-a)+'</span></summary>'+r+'</details>'}
+  var d=done[S.mod+k+S.idx];
+  var txt=(P&&S.idx===0)?'<p>A Guru is one who teaches us unknown things. Let us bow in gratitude to all our mentors or Gurus, before starting the process of learning.</p><p>Mother is our first guru. We learnt everything by imitating her. Then comes Father. He always supports us.</p><p>Teachers who educate us in schools play the major role. They teach us how to read and make knowledge accessible to us that helps us in this material world.</p><p>Then come our spiritual mentors, the most important gurus who teach us about the unseen eternal Supreme Power and dispel the darkness of ignorance.</p><p>We should bow before all our Gurus.</p>':'<p>The explanation for this '+w.toLowerCase()+' will appear here. This is sample content for the demo.</p>';
+  return '<div class="crumb"><a onclick="go(\'home\')">Home</a> / <a onclick="go(\'module\')">Module '+S.mod+'</a> / '+(P?'Prayers':'Stories')+'</div><div class="lay"><aside class="tree"><div class="th"><b>Module '+S.mod+' · '+(P?'Prayers':'Stories')+'</b><div class="pb"><i style="width:'+Math.round(c/L.length*100)+'%"></i></div><small>'+c+' of '+L.length+' completed</small></div>'+tr+'</aside><section class="main"><div class="hd"><div><div class="tag">'+w+' '+(S.idx+1)+' of '+L.length+'</div><h1>'+t+'</h1></div><button class="btn'+(d?' o':'')+'" onclick="mark()">'+(d?'✓ Completed':'Mark as complete')+'</button></div>'
+  +'<div class="sec"><h3>📜 Understanding the '+w.toLowerCase()+'</h3>'+txt+'</div>'
+  +'<div class="sec"><h3>🎵 Sloka audio</h3><div class="aud"><button class="pl" id="pl" onclick="play()" aria-label="Play audio">▶</button><div class="bar"><div class="pb"><i id="ab" style="width:0%"></i></div><div class="tm"><span id="at">0:00</span><span>0:45</span></div></div></div><div class="cap">Demo player. Real recordings will be attached to each lesson.</div></div>'
+  +'<div class="sec"><h3>🎬 Animation video</h3><div class="vid" id="vid"><button class="vp" onclick="vplay()" aria-label="Play video">▶</button><span class="vc">'+t+' · Animation</span></div><div class="cap">Videos are hosted on YouTube. <a href="https://youtu.be/5NF-gJacDwg" target="_blank" rel="noopener">Open on YouTube</a>'+(P&&S.idx===0?'':' (demo reuses the Prayer 1 video)')+'</div></div>'
+  +'<div class="nav"><button class="btn o" onclick="pick('+(S.idx-1)+')"'+(S.idx?'':' disabled style="opacity:.4"')+'>← Previous</button><button class="btn" onclick="pick('+(S.idx+1)+')"'+(S.idx<L.length-1?'':' disabled style="opacity:.4"')+'>Next →</button></div></section></div>'}
+
+function pick(i){var n=items(S.kind).length;if(i<0||i>=n)return;S.idx=i;render()}
+function mark(){var k=S.mod+S.kind+S.idx;done[k]=!done[k];render()}
+function vplay(){if(location.protocol==='file:'){window.open('https://youtu.be/5NF-gJacDwg','_blank');return}document.getElementById('vid').innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/5NF-gJacDwg?autoplay=1" title="Gratitude to Guru" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'}
+function play(){var b=document.getElementById('pl');
+  if(timer){clearInterval(timer);timer=null;b.textContent='▶';return}
+  b.textContent='⏸';var p=parseFloat(document.getElementById('ab').style.width)||0;
+  timer=setInterval(function(){p+=2;if(p>=100){p=100;clearInterval(timer);timer=null;b.textContent='▶'}
+    document.getElementById('ab').style.width=p+'%';var s=Math.round(45*p/100);document.getElementById('at').textContent='0:'+(s<10?'0':'')+s},300)}
+
+function render(){if(timer){clearInterval(timer);timer=null}
+  document.getElementById('app').innerHTML={home:home,module:module,learn:learn}[S.view]();
+  document.getElementById('subn').textContent=Object.keys(subs).length+' subscribed';
+  window.scrollTo(0,0)}
+(function(){var v=location.hash.slice(1);if(v==='module'||v==='learn')S.view=v==='learn'?'module':v;render()})();
+</script>
+</body>
+</html>
