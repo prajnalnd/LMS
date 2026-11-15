@@ -259,6 +259,12 @@ body.on-login .wrap{max-width:none;padding:0}
 @keyframes bob{50%{transform:translateY(-5px)}}
 .subj{display:flex;flex-wrap:wrap;gap:10px}.subj span,.ups span{background:rgba(7,18,52,.78);border:1px solid var(--line);border-radius:999px;padding:7px 16px;font-size:14px;display:inline-flex;gap:8px;align-items:center}.subj i{font-style:normal}
 .ups{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--mut);font-size:14px}.ups b{color:var(--gold);font-family:Georgia,serif;margin-right:4px}.ups span{border-style:dashed;padding:4px 12px;color:var(--ink)}
+
+.slk{white-space:pre-line;text-align:center;font-family:Georgia,'Noto Serif Devanagari','Nirmala UI',serif;font-size:21px;line-height:1.9;color:#fff3cf;padding:18px 14px;border-radius:14px;background:radial-gradient(circle at 50% 0,rgba(246,210,122,.18),rgba(232,184,74,.05));border:1px solid var(--acc);box-shadow:inset 0 0 30px rgba(232,184,74,.08)}
+
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}.ctl span{font-size:13px;color:var(--mut);margin-right:4px}.ctl .btn{margin-top:0;font-weight:700}
+
+.slk strong{color:#fff;font-weight:800;text-shadow:0 0 12px rgba(246,210,122,.8)}
 </style>
 </head>
 <body>
@@ -349,6 +355,7 @@ function paras(t){var a=String(t||'').split(/\n+/).map(function(x){return x.trim
 
 /* ================= content model ================= */
 var GURU_TEXT=['A Guru is one who teaches us unknown things. Let us bow in gratitude to all our mentors or Gurus, before starting the process of learning.','Mother is our first guru. We learnt everything by imitating her. Then comes Father. He always supports us.','Teachers who educate us in schools play the major role. They teach us how to read and make knowledge accessible to us that helps us in this material world.','Then come our spiritual mentors, the most important gurus who teach us about the unseen eternal Supreme Power and dispel the darkness of ignorance.','We should bow before all our Gurus.'].join('\n\n');
+var GURU_SLOKA='गुरुर्ब्रह्मा गुरुर्विष्णुः गुरुर्देवो महेश्वरः ।\nगुरुः साक्षात् परं ब्रह्म तस्मै श्री गुरवे नमः ॥\n\nGurur Brahma Gurur Vishnu Gurur Devo Maheshwaraha\nGuru Sakshat Param Brahma Tasmai Shri Guruve Namaha';
 var GURU_QUIZ=[
 {q:'According to the lesson, who is a Guru?',o:['One who teaches us unknown things','One who sings well','One who owns a school','One who lives in a temple'],a:0},
 {q:'Who is our first guru?',o:['Father','Mother','Teacher','Spiritual mentor'],a:1},
@@ -357,12 +364,12 @@ var GURU_QUIZ=[
 {q:'Who are described as the most important gurus?',o:['School teachers','Friends','Spiritual mentors who dispel the darkness of ignorance','Neighbours'],a:2},
 {q:'What should we do before starting the process of learning?',o:['Skip the lesson','Take a test','Rest','Bow in gratitude to all our mentors or Gurus'],a:3}];
 
-function newLesson(id,title,sample,kind){return{id:id,title:title,text:sample?'The explanation for this '+kind+' will appear here. This is sample content for the demo.':'',video:'',a1:null,a2:null,quiz:[],pass:''}}
+function newLesson(id,title,sample,kind){return{id:id,title:title,text:sample?'The explanation for this '+kind+' will appear here. This is sample content for the demo.':'',video:'',a1:null,a2:null,quiz:[],pass:'',sloka:''}}
 function seed(){var c={v:1,courses:{}};
   for(var n=1;n<=13;n++){var live=n<=4,pr=[],st=[];
     if(live){
       for(var i=1;i<=35;i++){
-        if(n===1&&i===1){var g=newLesson('m1p1','Gratitude to Guru',false,'prayer');g.text=GURU_TEXT;g.video='https://youtu.be/5NF-gJacDwg';g.quiz=JSON.parse(JSON.stringify(GURU_QUIZ));g.pass='5';pr.push(g)}
+        if(n===1&&i===1){var g=newLesson('m1p1','Gratitude to Guru',false,'prayer');g.text=GURU_TEXT;g.video='https://youtu.be/5NF-gJacDwg';g.quiz=JSON.parse(JSON.stringify(GURU_QUIZ));g.pass='5';g.sloka=GURU_SLOKA;pr.push(g)}
         else pr.push(newLesson('m'+n+'p'+i,'Prayer '+i+' (sample title)',true,'prayer'))}
       for(i=1;i<=STORY_COUNT[n];i++)st.push(newLesson('m'+n+'s'+i,'Story '+i+' (sample title)',true,'story'))}
     c.courses[n]={published:live,prayers:pr,stories:st}}
@@ -371,12 +378,12 @@ function cleanSlot(s){if(!s||typeof s!=='object')return null;
   if(s.t==='url'&&/^https?:\/\//i.test(str(s.url)))return{t:'url',url:s.url};
   if(s.t==='file'&&str(s.key))return{t:'file',key:s.key,name:str(s.name),size:+s.size||0};return null}
 function cleanQuiz(arr){return(Array.isArray(arr)?arr:[]).map(function(q){q=q||{};var o=Array.isArray(q.o)?q.o.map(str):[],ci=parseInt(q.a,10);return{q:str(q.q),o:o,a:ci>=0&&ci<o.length?ci:0}}).filter(function(q){return q.o.length>=2})}
-function cleanLesson(x){x=x||{};return{id:str(x.id)||uid(),title:str(x.title),text:str(x.text),video:str(x.video),a1:cleanSlot(x.a1),a2:cleanSlot(x.a2),quiz:cleanQuiz(x.quiz),pass:x.pass==null?'':String(x.pass)}}
+function cleanLesson(x){x=x||{};return{id:str(x.id)||uid(),title:str(x.title),text:str(x.text),sloka:str(x.sloka),video:str(x.video),a1:cleanSlot(x.a1),a2:cleanSlot(x.a2),quiz:cleanQuiz(x.quiz),pass:x.pass==null?'':String(x.pass)}}
 function cleanContent(c){var out={v:1,courses:{}};
   for(var n=1;n<=13;n++){var s=(c&&c.courses&&c.courses[n])||{};
     out.courses[n]={published:!!s.published,prayers:(Array.isArray(s.prayers)?s.prayers:[]).map(cleanLesson),stories:(Array.isArray(s.stories)?s.stories:[]).map(cleanLesson)}}
   return out}
-function load(){try{var r=JSON.parse(localStorage.getItem(K));if(r&&r.v===1&&r.courses)return cleanContent(r)}catch(e){}return seed()}
+function load(){try{var r=JSON.parse(localStorage.getItem(K));if(r&&r.v===1&&r.courses){var cc=cleanContent(r),f=cc.courses[1]&&cc.courses[1].prayers[0],rf=r.courses[1]&&r.courses[1].prayers&&r.courses[1].prayers[0];if(f&&f.id==='m1p1'&&rf&&!('sloka' in rf))f.sloka=GURU_SLOKA;return cc}}catch(e){}return seed()}
 var C=load();
 
 var saveT=null;
@@ -448,7 +455,7 @@ function learn(){if(PR){PR.cont={mod:S.mod,kind:S.kind,idx:S.idx};pSave()}var k=
     tr+='<details'+(o?' open':'')+'><summary>'+(P?'Prayers':'Stories')+' '+(a+1)+'–'+b+'<span>'+dn+'/'+(b-a)+'</span></summary>'+r+'</details>'}
   var dd=done[l.id];
   return crumb+'<div class="lay"><aside class="tree"><div class="th"><b>'+esc(nm)+' · '+(P?'Prayers':'Stories')+'</b><div class="pb"><i style="width:'+Math.round(c/L.length*100)+'%"></i></div><small>'+c+' of '+L.length+' completed</small></div>'+tr+'</aside><section class="main"><div class="hd"><div><div class="tag">'+w+' '+(S.idx+1)+' of '+L.length+'</div><h1>'+esc(l.title||'(untitled)')+'</h1></div><button class="btn'+(dd?' o':'')+'" onclick="mark()">'+(dd?'✓ Completed':'Mark as complete')+'</button></div>'
-  +'<div class="sec"><h3>📜 Understanding the '+w.toLowerCase()+'</h3>'+paras(l.text)+'</div>'
+  +'<div class="sec"><h3>📜 Understanding the '+w.toLowerCase()+'</h3>'+paras(l.text)+'</div>'+slokaSec(l,P)
   +audSec('a1','🎵 Sloka audio',l)
   +audSec('a2','🎧 Sloka Learning Audio',l)
   +vidSec(l)
@@ -509,7 +516,7 @@ function editor(l){var L=list(ADM.mod,ADM.kind),P=ADM.kind==='prayers',w=P?'pray
   var def=Math.min(vq(l).length||1,Math.max(1,Math.ceil((vq(l).length||1)*0.8)));
   return'<div class="hd"><div><div class="tag">'+(P?'Prayer':'Story')+' '+(i+1)+' of '+L.length+'</div><h1 class="ah2">Edit '+w+'</h1></div><div class="abar"><span id="svs" class="sv">✓ All changes saved</span><button class="btn o" onclick="aprev()">👁 Preview as student</button></div></div>'
   +'<div class="sec"><h3>Title (shown in the left panel)</h3><input class="in" id="ttl" value="'+esc(l.title)+'" oninput="atitle(this.value)"><div class="arow2"><button class="btn o sm" onclick="amove(-1)"'+(i?'':' disabled')+'>↑ Move up</button><button class="btn o sm" onclick="amove(1)"'+(i<L.length-1?'':' disabled')+'>↓ Move down</button><span class="sp"></span><button class="btn o dng sm" onclick="adelL()">Delete this '+w+'</button></div></div>'
-  +'<div class="sec"><h3>📜 Understanding the '+w+'</h3><textarea class="in" rows="11" oninput="aset(\'text\',this.value)">'+esc(l.text)+'</textarea><div class="hint">Press Enter twice to start a new paragraph.</div></div>'
+  +'<div class="sec"><h3>📜 Understanding the '+w+'</h3><textarea class="in" rows="11" oninput="aset(\'text\',this.value)">'+esc(l.text)+'</textarea><div class="hint">Press Enter twice to start a new paragraph.</div></div>'+(P?slokaEd(l):'')
   +aslot('a1','🎵 Sloka audio',l)
   +aslot('a2','🎧 Sloka Learning Audio',l)
   +'<div class="sec"><h3>🎬 YouTube video link</h3><input class="in" value="'+esc(l.video)+'" placeholder="https://youtu.be/…" oninput="avid(this.value)"><div class="hint" id="ytst">'+ytStatus(l.video)+'</div></div>'
@@ -630,14 +637,38 @@ function srch(q){var box=document.getElementById('sres');q=q.trim().toLowerCase(
   box.innerHTML=r.length?r.slice(0,8).map(function(x){return'<button class="sr" onmousedown="sgo('+x.n+',\''+x.k+'\','+x.i+')">'+esc(x.t)+'<small>'+esc(NAMES[x.n])+' · '+(x.k==='prayers'?'Prayer':'Story')+'</small></button>'}).join(''):'<div class="sr none">No match yet. Try another word.</div>';box.hidden=false}
 function sgo(n,k,i){if(!subs[n]){subs[n]=1;pSave();toast('Subscribed to '+NAMES[n])}S.mod=n;S.kind=k;S.idx=i;S.fromAdmin=false;var q=document.getElementById('sq');q.value='';document.getElementById('sres').hidden=true;go('learn')}
 document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('.sw')){var b=document.getElementById('sres');if(b)b.hidden=true}});
+/* ================= prayer (sloka text) section ================= */
+function rich(t){return esc(t).replace(/\*\*([^*\n]+?)\*\*/g,'<strong>$1</strong>')}
+function sloIn(v){aset('sloka',v);var p=document.getElementById('slp');if(p)p.innerHTML=rich(v.trim())||'<span style="color:var(--mut)">Nothing yet</span>'}
+function slokaSec(l,P){if(!P)return'';var t=String(l.sloka||'').trim();
+  return'<div class="sec"><h3>🙏 Prayer</h3>'+(t?'<div class="slk">'+rich(t)+'</div>':'<p style="color:var(--mut)">The prayer text has not been added yet.</p>')+'</div>'}
+function slokaEd(l){return'<div class="sec"><h3>🙏 Prayer (sloka text)</h3><div class="ctl" role="toolbar" aria-label="Letter case tools"><span>Select letters, then tap:</span><button type="button" class="btn o sm" onmousedown="event.preventDefault()" onclick="pbold()" title="Make selected letters bold (tap again to remove)"><b>B</b> Bold</button><button type="button" class="btn o sm" onmousedown="event.preventDefault()" onclick="pcase(\'up\')" title="Make selected letters capital">ABC</button><button type="button" class="btn o sm" onmousedown="event.preventDefault()" onclick="pcase(\'low\')" title="Make selected letters small">abc</button><button type="button" class="btn o sm" onmousedown="event.preventDefault()" onclick="pcase(\'title\')" title="Capital first letter of every word">Abc Abc</button><button type="button" class="btn o sm" onmousedown="event.preventDefault()" onclick="pcase(\'toggle\')" title="Swap capital and small">aBc</button><button type="button" class="btn o sm" onmousedown="event.preventDefault()" onclick="pcase(\'all\')" title="Capital first letter of every word in the whole prayer">Whole prayer: Abc Abc</button></div><textarea class="in" id="slt" rows="6" oninput="sloIn(this.value)" placeholder="Type or paste the prayer here">'+esc(l.sloka)+'</textarea><div class="hint" style="margin:10px 0 6px">Preview (what students see):</div><div class="slk" id="slp" style="font-size:18px">'+(rich(String(l.sloka||'').trim())||'<span style="color:var(--mut)">Nothing yet</span>')+'</div><div class="hint">Shown to students between the explanation and the audio. Each new line stays a new line. Bold letters are kept inside **stars**. You can also press Ctrl+Z to undo a change.</div></div>'}
+function pbold(){var t=document.getElementById('slt');if(!t)return;var a=t.selectionStart,b=t.selectionEnd;if(a===b){toast('Select the letters first, then tap Bold');return}
+  var v=t.value,x=v.slice(a,b),y,s0=a,e0=b;
+  if(x.length>4&&x.slice(0,2)==='**'&&x.slice(-2)==='**')y=x.slice(2,-2);
+  else if(v.slice(a-2,a)==='**'&&v.slice(b,b+2)==='**'){s0=a-2;e0=b+2;y=x}
+  else y='**'+x+'**';
+  t.focus();t.setSelectionRange(s0,e0);var ok=false;try{ok=document.execCommand('insertText',false,y)}catch(e){}
+  if(!ok||t.value.slice(s0,s0+y.length)!==y){t.setRangeText(y,s0,e0,'select');t.dispatchEvent(new Event('input',{bubbles:true}))}
+  t.setSelectionRange(s0,s0+y.length)}
+function pcase(m){var t=document.getElementById('slt');if(!t)return;var a=t.selectionStart,b=t.selectionEnd;
+  if(m==='all'){a=0;b=t.value.length}else if(a===b){toast('Select the letters first, then tap a button');return}
+  var x=t.value.slice(a,b),y;
+  if(m==='up')y=x.toUpperCase();else if(m==='low')y=x.toLowerCase();
+  else if(m==='toggle')y=x.replace(/\p{L}/gu,function(c){return c===c.toUpperCase()?c.toLowerCase():c.toUpperCase()});
+  else y=x.replace(/(^|[\s\-'"(])(\p{L})/gu,function(_,p,c){return p+c.toUpperCase()});
+  t.focus();t.setSelectionRange(a,b);
+  var ok=false;try{ok=document.execCommand('insertText',false,y)}catch(e){}
+  if(!ok||t.value.slice(a,a+y.length)!==y){t.setRangeText(y,a,b,'select');t.dispatchEvent(new Event('input',{bubbles:true}))}
+  t.setSelectionRange(a,a+y.length);sloIn(t.value)}
 /* ================= login page ================= */
 function loginView(){
   return loginBg()+'<div class="lgn"><div class="lcol"><div class="lhero"><div class="tag">Joyous voyage through knowledge</div><h1>Jai Srimannarayana!</h1><p>Listen to ancient prayers, watch animated stories, play quizzes and collect stars. Your adventure starts here, little seeker.</p></div>'+kidsArt()+'<div class="perks"><span>⭐ Earn stars</span><span>🏅 Win badges</span><span>🚀 Level up</span><span>🔥 Keep your streak</span></div></div>'
   +'<form class="lcard" onsubmit="return doLogin(event)"><img src="'+LOGO+'" alt="PRAJNA" class="llogo"><h2>Login to start learning</h2><label for="lu">User id</label><input class="in" id="lu" autocomplete="username" autocapitalize="off" spellcheck="false" required><label for="lp">Password</label><input class="in" id="lp" type="password" autocomplete="current-password" required><div class="lerr" id="lerr" role="alert" hidden></div><button class="btn big" type="submit">Let\'s go! →</button>'
   +'<div class="demo"><b>Demo logins</b><div class="dq"><button type="button" class="btn o sm" onclick="quick(\'student\')">🎒 Student</button><button type="button" class="btn o sm" onclick="quick(\'admin\')">🛠 Admin</button></div><small>Student: student / student · Admin: admin / admin</small></div></form></div>'+loginInfo()}
 var VALS=[['🙏','Gratitude'],['🌱','Humility'],['🤝','Selfless service'],['👨‍👩‍👧','Venerating Parents and Elders'],['🏛️','Tradition and Culture'],['🧠','Memorization techniques']];
-var SUBJ=[['🕯️','Vedic Festivals'],['📿','Vedic Prayers'],['📜','Stories from the Upanishads'],['🤝','Sneham: good friendship vs bad friendship'],['🙏','Kruthagnatha (gratitude)'],['🕉️','Bhagawad Githa'],['🏹','Ramayanam']];
-function loginInfo(){return'<section class="lrn"><div class="eb">In PRAJNA, kids learn these values</div><div class="vgrid">'+VALS.map(function(v,i){return'<div class="vc2" style="animation-delay:'+i*.25+'s"><i>'+v[0]+'</i><b>'+v[1]+'</b></div>'}).join('')+'</div><div class="eb" style="margin-top:30px">Subject areas</div><div class="subj">'+SUBJ.map(function(v){return'<span><i>'+v[0]+'</i>'+v[1]+'</span>'}).join('')+'</div><div class="ups"><b>Stories from the Upanishads</b><span>Matrudevobhava</span><span>Pitrudevobhava</span><span>Acharyadevobhava</span></div></section>'}
+var SUBJ=[['🕯️','Vedic Festivals'],['📿','Vedic Prayers'],['🕉️','Bhagawad Githa'],['🏹','Ramayanam']];
+function loginInfo(){return'<section class="lrn"><div class="eb">In PRAJNA, kids learn these values</div><div class="vgrid">'+VALS.map(function(v,i){return'<div class="vc2" style="animation-delay:'+i*.25+'s"><i>'+v[0]+'</i><b>'+v[1]+'</b></div>'}).join('')+'</div><div class="eb" style="margin-top:30px">Subject areas</div><div class="subj">'+SUBJ.map(function(v){return'<span><i>'+v[0]+'</i>'+v[1]+'</span>'}).join('')+'</div><div class="ups"><b>Stories from the Upanishads</b><span>Matrudevobhava</span><span>Pitrudevobhava</span><span>Acharyadevobhava</span><span>Sneham</span><span>Kruthagnatha</span></div></section>'}
 /* ================= home ================= */
 var MOTIF=['','🕯️','📿','🐚','🌸','🕉️','🦚','🐘','🏵️','🌟','📖','🎶','🔱','🌺'];
 var QUOTES=['Knowledge is the light that never goes out.','A little learning every day makes a big wise heart.','Say your prayers with love and they will fill your day with joy.','Good stories teach us how to be kind, brave and true.','Bow to your teachers, and wisdom will bow to you.','Every great journey begins with one small step. Take yours today!','A curious mind is a shining lamp.'];
